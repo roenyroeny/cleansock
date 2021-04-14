@@ -42,6 +42,8 @@ int csock_peek(csock_t* sock, unsigned char* data, int maxlen);
 #pragma comment(lib, "wsock32.lib")
 #undef AddJob
 #else
+#include <cstring>
+#include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netinet/in.h>
@@ -181,7 +183,7 @@ int csock_accept(csock_t* listening_socket, csock_t* remote_socket, csock_addr_t
 	timeval timer;
 	timer.tv_sec = 0;
 	timer.tv_usec = 0;
-	int retval = select(0, &readfd, NULL, NULL, &timer);
+	int retval = select(listening_socket->handle + 1, &readfd, NULL, NULL, &timer);
 	if (retval == 0)
 		return CSOCK_RESULT_NONE_PENDING;
 	else if (retval == -1) {
