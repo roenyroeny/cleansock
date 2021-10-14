@@ -227,7 +227,7 @@ int csock_receive(csock_t* sock, unsigned char* data, int maxlen)
 
 	if (maxlen == 0)
 		return 0;
-	int received_bytes = recv(sock->handle, (char*)data, maxlen, 0);
+	int received_bytes = recv(sock->handle, (char*)data, maxlen, MSG_WAITALL);
 	if (received_bytes < 0)
 	{
 		return CSOCK_RESULT_FAILED_GENERIC;
